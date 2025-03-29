@@ -1,0 +1,51 @@
+services:
+  postgres_us:
+    image: postgres:latest
+    container_name: user_services_db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: user_services_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data_us:/var/lib/postgresql/data
+
+  pgadmin_us:
+    image: dpage/pgadmin4
+    container_name: user_serveces_pgadmin
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: 123456
+    ports:
+      - "5151:80"
+    depends_on:
+      - postgres_us
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: user_serveces_app
+    restart: always
+    environment:
+      APP_PORT: "8080"
+      DB_DRIVER: "postgres"
+      DB_USER: "admin"
+      DB_PASSWORD: "123456"
+      DB_NAME: "user_services_db"
+      DB_HOST: "postgres_us"
+      DB_PORT: "5432"
+      DB_SSL_MODE: "disable"
+    ports:
+      - "8181:8080"
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres_us
+    command: air
+
+volumes:
+  postgres_data_us:
