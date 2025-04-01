@@ -1,9 +1,22 @@
 package routes
 
-import "github.com/gin-gonic/gin"
+import (
+	"database/sql"
 
-func RegisterRoutes(router *gin.Engine) {
-	api := router.Group("/api/v1")
+	"github.com/gin-gonic/gin"
+)
 
-	UserRoutes(api)
+type RegisterRoutes struct {
+	db     *sql.DB
+	router *gin.Engine
+}
+
+func NewRegisterRoutes(db *sql.DB, router *gin.Engine) *RegisterRoutes {
+	return &RegisterRoutes{db: db, router: router}
+}
+
+func (r *RegisterRoutes) GetRegisterRoutes() {
+	api := r.router.Group("/api/v1")
+
+	UserRoutes(r.db, api)
 }
