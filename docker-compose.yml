@@ -14,7 +14,7 @@ services:
 
   pgadmin_us:
     image: dpage/pgadmin4
-    container_name: user_serveces_pgadmin
+    container_name: user_services_pgadmin
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
@@ -28,7 +28,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: user_serveces_app
+    container_name: user_services_app
     restart: always
     environment:
       APP_PORT: "8080"
@@ -39,6 +39,7 @@ services:
       DB_HOST: "postgres_us"
       DB_PORT: "5432"
       DB_SSL_MODE: "disable"
+      RUN_MIGRATIONS: true
     ports:
       - "8181:8080"
     volumes:

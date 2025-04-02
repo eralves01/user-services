@@ -31,10 +31,11 @@ func (h *UserHandler) Create(c *gin.Context) {
 		return
 	}
 
-	if err := h.service.Create(user); err != nil {
+	userResponse, err := h.service.Create(user)
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Usuário criado!", "user": user})
+	c.JSON(http.StatusOK, gin.H{"message": "Usuário criado!", "user": userResponse})
 }

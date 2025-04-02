@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/eralves01/user-services/configs"
 	"github.com/eralves01/user-services/database"
@@ -23,6 +24,10 @@ func main() {
 		log.Fatalf("Database connection failed: %v", err)
 	} else {
 		log.Println("Database connected successfully!")
+	}
+
+	if os.Getenv("RUN_MIGRATIONS") == "true" {
+		database.RunMigrations()
 	}
 
 	router := gin.Default()
