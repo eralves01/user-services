@@ -14,6 +14,7 @@ type CreateUserDTO struct {
 	Password     string `json:"password"`
 	PasswordHash string
 	UserType     constants.UserType `json:"user_type"`
+	UserTypeID   int
 }
 
 func (c *CreateUserDTO) Validate() error {
