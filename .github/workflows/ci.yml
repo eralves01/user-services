@@ -1,0 +1,65 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - '*'  # Roda os testes em qualquer branch
+  pull_request:
+    branches:
+      - main  # Também roda os testes ao criar PRs para a main
+
+jobs:
+  test:
+    runs-on: ubuntu-latest  # Ambiente Linux
+
+    services:
+      postgres:
+        image: postgres:15  # Usa a imagem do PostgreSQL 15
+        env:
+          POSTGRES_USER: admin
+          POSTGRES_PASSWORD: 123456
+          POSTGRES_DB: user_services_db
+        ports:
+          - 5432:5432  # Mapeia a porta para a aplicação Go se conectar
+        options: >-
+          --health-cmd="pg_isready -U user -d testdb"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    env:
+      DATABASE_URL: postgres://admin:123456@localhost:5432/user_services_db?sslmode=disable
+
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Configurar Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.24'
+
+      - name: Instalar dependências
+        run: go mod tidy
+
+      - name: Aguardar banco de dados ficar pronto
+        run: |
+          echo "Esperando banco de dados responder..."
+          for i in {1..10}; do
+            pg_isready -h $DB_HOST -p $DB_PORT -U $DB_USER && break
+            echo "Aguardando..."
+            sleep 3
+          done
+
+      - name: Instalar migrate CLI
+        run: |
+          curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz | tar xvz
+          sudo mv migrate /usr/local/bin/
+
+      - name: Rodar migrações
+        run: |
+          migrate -database "$DATABASE_URL" -path ./database/migrations up
+
+      - name: Rodar testes
+        run: go test -v ./...
