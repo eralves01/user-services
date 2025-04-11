@@ -1,7 +1,6 @@
 package repositories
 
 import (
-	"database/sql"
 	"log"
 
 	"github.com/eralves01/user-services/constants"
@@ -9,10 +8,10 @@ import (
 )
 
 type UserRepository struct {
-	db *sql.DB
+	db DBExecutor
 }
 
-func NewUserRepository(db *sql.DB) *UserRepository {
+func NewUserRepository(db DBExecutor) *UserRepository {
 	return &UserRepository{db: db}
 }
 
