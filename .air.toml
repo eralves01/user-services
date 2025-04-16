@@ -1,0 +1,28 @@
+# Arquivo de configuração para o Air (live reload para Go)
+# https://github.com/cosmtrek/air
+
+[build]
+# Comando para buildar o projeto (por padrão, `go build -o tmp/main .`)
+cmd = "go build -o ./tmp/main ."
+# Diretório onde o binário será gerado
+bin = "tmp/main"
+# Arquivo principal do projeto
+main = "main.go"
+# Se quiser rodar arquivos no cmd/
+include_ext = ["go", "tpl", "tmpl", "html"]
+exclude_dir = ["vendor", "tmp", "node_modules"]
+exclude_file = ["*_test.go"]
+follow_symlink = true
+
+[log]
+time = true
+
+[debug]
+# Mostra comandos executados
+show_log = true
+
+[color]
+main = "yellow"
+watcher = "cyan"
+build = "green"
+runner = "magenta"

@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/eralves01/user-services/dto"
-	"github.com/eralves01/user-services/services"
+	"github.com/eralves01/user-services/internal/services"
 	"github.com/gin-gonic/gin"
 )
 
@@ -19,23 +19,22 @@ func NewUserHandler(service *services.UserService) *UserHandler {
 }
 
 func (h *UserHandler) Create(c *gin.Context) {
-	var user dto.CreateUserDTO
+	var user dto.CreateUserInput
 
 	if err := c.ShouldBindJSON(&user); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error 1": err.Error()})
 		return
 	}
 
 	if err := user.Validate(); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error 2": err.Error()})
 		return
 	}
 
-	userResponse, err := h.service.Create(user)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	if err := h.service.Create(user); err != nil {
+		c.JSON(http.StatusConflict, gin.H{"error 3": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "Usuário criado!", "user": userResponse})
+	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully!"})
 }

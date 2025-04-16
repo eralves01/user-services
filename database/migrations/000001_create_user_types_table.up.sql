@@ -1,6 +1,6 @@
 CREATE TABLE user_types (
-    id SERIAL PRIMARY KEY,
-    type VARCHAR(50) UNIQUE NOT NULL
+    id INTEGER UNIQUE NOT NULL,
+    value VARCHAR(50) UNIQUE NOT NULL
 );
 
-INSERT INTO user_types (type) VALUES ('client'), ('merchant');
+INSERT INTO user_types (id, value) VALUES (1, 'client'), (2,'merchant');

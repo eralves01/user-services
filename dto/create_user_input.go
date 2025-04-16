@@ -5,19 +5,17 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/eralves01/user-services/constants"
+	"github.com/eralves01/user-services/internal/domain"
 )
 
-type CreateUserDTO struct {
-	Name         string `json:"name"`
-	Email        string `json:"email"`
-	Password     string `json:"password"`
-	PasswordHash string
-	UserType     constants.UserType `json:"user_type"`
-	UserTypeID   int
+type CreateUserInput struct {
+	Name       string `json:"name"`
+	Email      string `json:"email"`
+	Password   string `json:"password"`
+	UserTypeID int    `json:"user_type_id"`
 }
 
-func (c *CreateUserDTO) Validate() error {
+func (c *CreateUserInput) Validate() error {
 	var errorsList []string
 
 	// Validações
@@ -30,10 +28,6 @@ func (c *CreateUserDTO) Validate() error {
 	if len(c.Password) < 6 {
 		errorsList = append(errorsList, "Password must be at least 6 characters long")
 	}
-	if !isValidUserType(c.UserType) {
-		errorsList = append(errorsList, "The user type is not valid")
-	}
-
 	// Se houver erros, retorna todos concatenados
 	if len(errorsList) > 0 {
 		return errors.New(strings.Join(errorsList, "; "))
@@ -42,15 +36,11 @@ func (c *CreateUserDTO) Validate() error {
 	return nil
 }
 
+func (c *CreateUserInput) ToUser() *domain.User {
+	return domain.NewUser(c.Name, c.Email, c.UserTypeID, c.Password)
+}
+
 func isValidEmail(email string) bool {
 	re := regexp.MustCompile(`^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$`)
 	return re.MatchString(email)
-}
-
-func isValidUserType(userType constants.UserType) bool {
-	validTypes := map[constants.UserType]bool{
-		constants.Client:   true,
-		constants.Merchant: true,
-	}
-	return validTypes[userType]
 }
