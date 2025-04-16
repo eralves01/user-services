@@ -4,17 +4,11 @@ import (
 	"database/sql"
 	"net/http"
 
-	"github.com/eralves01/user-services/handlers"
-	"github.com/eralves01/user-services/repositories"
-	"github.com/eralves01/user-services/services"
+	"github.com/eralves01/user-services/internal/handlers"
 	"github.com/gin-gonic/gin"
 )
 
-func UserRoutes(db *sql.DB, router *gin.RouterGroup) {
-	repository := repositories.NewUserRepository(db)
-	service := services.NewUserService(repository)
-	handler := handlers.NewUserHandler(service)
-
+func UserRoutes(handler *handlers.UserHandler, db *sql.DB, router *gin.RouterGroup) {
 	router.GET("/users", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "Lista de usuários"})
 	})

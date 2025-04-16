@@ -7,18 +7,16 @@ import (
 
 	"github.com/eralves01/user-services/configs"
 	"github.com/eralves01/user-services/database"
-	"github.com/eralves01/user-services/routes"
+	"github.com/eralves01/user-services/internal/routes"
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
 	configs.LoadConfig()
 
-	// Criar instância do banco
 	db := database.NewDatabase().GetInstance()
 	defer database.NewDatabase().CloseConnection()
 
-	// Testar conexão
 	err := db.Ping()
 	if err != nil {
 		log.Fatalf("Database connection failed: %v", err)

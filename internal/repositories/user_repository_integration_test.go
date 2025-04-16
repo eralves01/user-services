@@ -6,7 +6,8 @@ import (
 	"os"
 	"testing"
 
-	"github.com/eralves01/user-services/dto"
+	"github.com/eralves01/user-services/internal/domain"
+	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 	"github.com/stretchr/testify/assert"
 
@@ -32,15 +33,13 @@ func TestMain(m *testing.M) {
 func TestCreateUser_Integration(t *testing.T) {
 	repo := NewUserRepository(testDB)
 
-	input := dto.CreateUserDTO{
-		Name:       "Integration User",
-		Email:      "integration@example.com",
-		UserTypeID: 1,
-		Password:   "hash123",
-	}
+	input := *domain.NewUser(
+		"User test",
+		uuid.New().String()+"@teste.com",
+		1,
+		"123456",
+	)
 
-	result, err := repo.Create(input)
+	err := repo.Create(input)
 	assert.NoError(t, err)
-	assert.Equal(t, input.Email, result.Email)
-	assert.Equal(t, input.UserTypeID, result.UserTypeID)
 }
