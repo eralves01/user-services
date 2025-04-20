@@ -1,8 +1,8 @@
 package services
 
 import (
-	"github.com/eralves01/user-services/dto"
 	interfaces "github.com/eralves01/user-services/internal/domain/interfaces"
+	"github.com/eralves01/user-services/internal/dto"
 )
 
 type UserService struct {

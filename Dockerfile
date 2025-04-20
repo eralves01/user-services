@@ -1,25 +1,13 @@
-# Stage 1: Builder
-FROM golang:1.24 AS builder
+FROM golang:1.24
+
+RUN go install github.com/air-verse/air@latest
 
 WORKDIR /app
 
-COPY go.mod go.sum ./
-RUN go mod download
+RUN go install -tags 'postgres' github.com/golang-migrate/migrate/v4/cmd/migrate@latest
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o main .
+RUN go mod tidy
 
-# Stage 2: Final (mais leve, sem ferramentas de build)
-FROM alpine:latest
-
-RUN apk --no-cache add ca-certificates
-
-WORKDIR /app
-
-COPY --from=builder /app/main .
-COPY --from=builder /app/.air.toml . 
-
-EXPOSE 8080
-
-CMD ["./main"]
+CMD ["air"]

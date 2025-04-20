@@ -3,7 +3,7 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/eralves01/user-services/dto"
+	"github.com/eralves01/user-services/internal/dto"
 	"github.com/eralves01/user-services/internal/services"
 	"github.com/gin-gonic/gin"
 )

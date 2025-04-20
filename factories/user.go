@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"log"
 
-	"github.com/eralves01/user-services/dto"
+	"github.com/eralves01/user-services/internal/dto"
 	"github.com/google/uuid"
 )
 

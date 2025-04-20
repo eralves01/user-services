@@ -1,6 +1,6 @@
 services:
   postgres_us:
-    image: postgres:16-alpine
+    image: postgres:latest
     container_name: user_services_db
     restart: always
     environment:
@@ -42,8 +42,11 @@ services:
       RUN_MIGRATIONS: true
     ports:
       - "8181:8080"
+    volumes:
+      - .:/app
     depends_on:
       - postgres_us
+    command: air
 
 volumes:
   postgres_data_us:
