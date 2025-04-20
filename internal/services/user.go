@@ -18,7 +18,7 @@ func NewUserService(repository interfaces.UserRepository, userTypeService *UserT
 }
 
 func (s *UserService) Create(user dto.CreateUserInput) error {
-	_, err := s.userTypeService.reposytory.GetUserTypeByID(user.UserTypeID)
+	_, err := s.userTypeService.reposytory.GetByID(user.UserTypeID)
 	if err != nil {
 		return err
 	}

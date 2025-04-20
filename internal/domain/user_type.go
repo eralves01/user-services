@@ -1,8 +1,8 @@
 package domain
 
 type UserType struct {
-	ID    int
-	Value string
+	ID    int    `json:"id"`
+	Value string `json:"value"`
 }
 
 func NewUserType(id int, value string) *UserType {
